@@ -17,54 +17,12 @@ private:
     int count;
 
 public:
-    IntQueue() {
-        front = NULL;
-        rear = NULL;
-        count = 0;
-    }
-
-    ~IntQueue() {
-        while (!isEmpty()) {
-            dequeue();
-        }
-    }
-
-    bool isEmpty() {
-        return front == NULL;
-    }
-
-    int size() {
-        return count;
-    }
-
-    void enqueue(int value) {
-        IntNode* node = new IntNode;
-        node->data = value;
-        node->next = NULL;
-        if (rear == NULL) {
-            front = node;
-            rear = node;
-        } else {
-            rear->next = node;
-            rear = node;
-        }
-        count++;
-    }
-
-    int dequeue() {
-        if (isEmpty()) {
-            return -1;
-        }
-        IntNode* temp = front;
-        int value = temp->data;
-        front = front->next;
-        if (front == NULL) {
-            rear = NULL;
-        }
-        delete temp;
-        count--;
-        return value;
-    }
+    IntQueue();
+    ~IntQueue();
+    bool isEmpty();
+    int size();
+    void enqueue(int value);
+    int dequeue();
 };
 
 class IntStack {
@@ -73,49 +31,18 @@ private:
     int count;
 
 public:
-    IntStack() {
-        top = NULL;
-        count = 0;
-    }
-
-    ~IntStack() {
-        while (!isEmpty()) {
-            pop();
-        }
-    }
-
-    bool isEmpty() {
-        return top == NULL;
-    }
-
-    int size() {
-        return count;
-    }
-
-    void push(int value) {
-        IntNode* node = new IntNode;
-        node->data = value;
-        node->next = top;
-        top = node;
-        count++;
-    }
-
-    int pop() {
-        if (isEmpty()) {
-            return -1;
-        }
-        IntNode* temp = top;
-        int value = temp->data;
-        top = top->next;
-        delete temp;
-        count--;
-        return value;
-    }
+    IntStack();
+    ~IntStack();
+    bool isEmpty();
+    int size();
+    void push(int value);
+    int pop();
 };
 
 const int UNDO_ROAD = 0;
 const int UNDO_CAPACITY = 1;
 const int UNDO_SAFETY = 2;
+const int UNDO_WINDOW = 3;
 
 struct UndoRecord {
     int type;
@@ -136,64 +63,13 @@ private:
     int count;
 
 public:
-    UndoStack() {
-        top = NULL;
-        count = 0;
-    }
-
-    ~UndoStack() {
-        while (top != NULL) {
-            UndoNode* temp = top;
-            top = top->next;
-            delete temp;
-        }
-    }
-
-    bool isEmpty() {
-        return top == NULL;
-    }
-
-    int size() {
-        return count;
-    }
-
-    void push(UndoRecord record) {
-        UndoNode* node = new UndoNode;
-        node->record = record;
-        node->next = top;
-        top = node;
-        count++;
-    }
-
-    bool pop(UndoRecord& record) {
-        if (top == NULL) {
-            return false;
-        }
-        UndoNode* temp = top;
-        record = temp->record;
-        top = top->next;
-        delete temp;
-        count--;
-        return true;
-    }
-
-    void print() {
-        if (top == NULL) {
-            cout << "  (undo stack is empty)" << endl;
-            return;
-        }
-        UndoNode* current = top;
-        int position = 1;
-        while (current != NULL) {
-            cout << "  " << position << ". " << current->record.description;
-            if (position == 1) {
-                cout << "   <- top (undone first)";
-            }
-            cout << endl;
-            current = current->next;
-            position++;
-        }
-    }
+    UndoStack();
+    ~UndoStack();
+    bool isEmpty();
+    int size();
+    void push(UndoRecord record);
+    bool pop(UndoRecord& record);
+    void print();
 };
 
 #endif

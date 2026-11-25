@@ -116,6 +116,18 @@ void runDemo(string dataFile) {
     planner.reportUnserved();
     planner.consistencyCheck();
 
+    heading("SCENARIO 3b: ROAD CAPACITY LIMITS ROUTING");
+    planner.reportBottlenecks();
+    cout << "  Command wants everyone clear within 6 minutes instead of 10:" << endl;
+    planner.setWindow(6, true);
+    planner.reportAllocations();
+    planner.reportBottlenecks();
+    planner.reportUnserved();
+    planner.routeToShelter(16);
+    planner.consistencyCheck();
+    planner.undoLast();
+    planner.consistencyCheck();
+
     heading("SCENARIO 4: MULTIPLE INCIDENTS AND INSUFFICIENT RESOURCES");
     planner.reportIncidents();
     planner.showHeap();
@@ -185,6 +197,16 @@ void runDemo(string dataFile) {
     planner.reportAllocations();
     planner.reportUnserved();
     planner.reportShelterUtilization();
+    planner.consistencyCheck();
+    subheading("A later change triggers a re-plan: the revision and the held people are kept");
+    planner.setShelterCapacity(23, 450, true);
+    planner.reportAllocations();
+    planner.reportUnserved();
+    planner.consistencyCheck();
+    subheading("Operator releases the held people");
+    planner.releaseHeld(4);
+    planner.releaseHeld(4);
+    planner.reportUnserved();
     planner.consistencyCheck();
 
     heading("SCENARIO 9: UNDO THE LATEST UPDATES (STACK, LIFO)");
@@ -275,7 +297,7 @@ void benchGraph(int n) {
     double dfsTime = secondsSince(start) / repeats;
     start = chrono::high_resolution_clock::now();
     for (int r = 0; r < repeats; r++) {
-        g->dijkstra(r % n, dist, parent, true);
+        g->dijkstra(r % n, dist, parent, true, 0);
     }
     double dijTime = secondsSince(start) / repeats;
     int pathLen = g->buildPath(parent, (repeats - 1) % n, n - 1, order);
@@ -294,6 +316,7 @@ void benchHeap(int n) {
     for (int i = 0; i < n; i++) {
         pool[i].id = i + 1;
         pool[i].severity = 1 + nextRandom(5);
+        pool[i].priority = pool[i].severity;
         pool[i].population = nextRandom(1000);
         pool[i].timeReceived = nextRandom(100000);
         pool[i].used = true;
@@ -308,6 +331,7 @@ void benchHeap(int n) {
     start = chrono::high_resolution_clock::now();
     for (int i = 0; i < n / 10; i++) {
         pool[i].severity = 1 + nextRandom(5);
+        pool[i].priority = pool[i].severity;
         heap.updatePriority(i);
     }
     double updateTime = secondsSince(start);
@@ -475,8 +499,9 @@ void interactive(string dataFile) {
         cout << "19 Dispatch all possible       20 Complete task            21 Show priority heap" << endl;
         cout << "22 Cancel allocation           23 Revise allocation        24 Purge closed incidents" << endl;
         cout << "25 All reports                 26 Event log                27 Consistency check" << endl;
-        cout << "28 Show undo stack              0 Exit" << endl;
-        int choice = readInt("Choice: ", 0, 28);
+        cout << "28 Show undo stack             29 Set evacuation window    30 Release held people" << endl;
+        cout << " 0 Exit" << endl;
+        int choice = readInt("Choice: ", 0, 30);
         if (choice == 0) {
             break;
         } else if (choice == 1) {
@@ -561,6 +586,10 @@ void interactive(string dataFile) {
             planner.consistencyCheck();
         } else if (choice == 28) {
             planner.printUndoStack();
+        } else if (choice == 29) {
+            planner.setWindow(readInt("Evacuation window in minutes (1-240): ", -INF, INF), true);
+        } else if (choice == 30) {
+            planner.releaseHeld(readInt("Building id: ", -INF, INF));
         }
     }
     cout << "Goodbye." << endl;
