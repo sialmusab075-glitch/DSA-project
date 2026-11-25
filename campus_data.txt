@@ -1,0 +1,96 @@
+# Campus Emergency Evacuation dataset
+# LOCATIONS: id type name people_or_capacity affected(0/1)
+#   BUILDING -> number is the population, SHELTER -> number is the capacity
+LOCATIONS 27
+1  GATE     Main_Gate             0   0
+2  GATE     Back_Gate             0   0
+3  BUILDING Admin_Block         120   0
+4  BUILDING Library             200   1
+5  BUILDING CS_Faculty          300   1
+6  BUILDING EE_Faculty          280   1
+7  BUILDING ME_Faculty          260   0
+8  BUILDING Chem_Lab             90   1
+9  BUILDING Lecture_Hall        450   1
+10 BUILDING Cafeteria           220   0
+11 BUILDING Hostel_A            350   1
+12 BUILDING Hostel_B            350   1
+13 BUILDING Hostel_C            300   0
+14 BUILDING Sports_Complex      150   0
+15 BUILDING Medical_Center       80   0
+16 BUILDING Auditorium          400   1
+17 BUILDING Workshop            110   0
+18 JUNCTION Junction_Central      0   0
+19 JUNCTION Junction_East         0   0
+20 JUNCTION Junction_West         0   0
+21 SHELTER  Cricket_Ground      900   0
+22 SHELTER  Football_Ground     700   0
+23 SHELTER  Parking_Lot         400   0
+24 SHELTER  Assembly_North      300   0
+25 SHELTER  Open_Lawn           250   0
+26 BUILDING Guest_House          40   0
+27 BUILDING Observatory          25   1
+
+# ROADS: from to distance(m) capacity(people/min) status
+ROADS 38
+1  3  120 60 OPEN
+1  23  80 80 OPEN
+3  4  100 50 OPEN
+3  18 150 60 OPEN
+4  18  90 50 OPEN
+4  5  110 40 OPEN
+5  6   70 40 OPEN
+5  18 130 50 OPEN
+6  7   90 40 OPEN
+6  19 120 50 OPEN
+7  17  60 30 OPEN
+7  8   80 30 OPEN
+8  19 100 30 OPEN
+19 22 140 70 OPEN
+19 11 160 50 OPEN
+18 9   80 70 OPEN
+9  21 200 80 OPEN
+9  10  70 50 OPEN
+10 20 110 50 OPEN
+18 21 180 90 OPEN
+20 12 100 50 OPEN
+20 13 130 50 OPEN
+12 13  90 40 OPEN
+13 25  70 40 OPEN
+11 12 150 40 OPEN
+11 22 120 60 OPEN
+20 14  90 60 OPEN
+14 22 100 70 OPEN
+14 2  140 60 OPEN
+2  24  60 60 OPEN
+16 18 100 60 OPEN
+16 24 210 50 OPEN
+15 3   90 40 OPEN
+15 1  110 50 OPEN
+17 2  250 30 HAZARDOUS
+26 2  130 30 OPEN
+27 26 300 20 BLOCKED
+10 21 160 60 CONGESTED
+
+# RESOURCES: id type name location_id
+RESOURCES 6
+1 AMBULANCE   Ambulance_1   15
+2 AMBULANCE   Ambulance_2   1
+3 FIRE_TRUCK  Fire_Truck_1  1
+4 FIRE_TRUCK  Fire_Truck_2  2
+5 RESCUE_TEAM Rescue_Team_A 3
+6 RESCUE_TEAM Rescue_Team_B 14
+
+# INCIDENTS: id location_id type severity affected_population time description
+INCIDENTS 12
+1  8  GAS_LEAK   5  90  2  Chlorine_leak_in_lab
+2  5  FIRE       4 300  5  Server_room_fire
+3  11 FIRE       3 350  7  Kitchen_fire_in_hostel
+4  4  MEDICAL    2   5  8  Student_fainted
+5  9  STRUCTURAL 4 450  3  Ceiling_crack_in_hall
+6  17 FIRE       3 110 10  Welding_fire
+7  10 MEDICAL    3  12 11  Burn_injuries
+8  6  GAS_LEAK   4 280  6  Gas_smell_in_lab
+9  27 MEDICAL    2   3  9  Injured_staff_member
+10 16 STRUCTURAL 2 400 12  Loose_ceiling_panel
+11 14 MEDICAL    1   2 15  Sprained_ankle
+12 12 FIRE       5 350 13  Electrical_fire_in_hostel
